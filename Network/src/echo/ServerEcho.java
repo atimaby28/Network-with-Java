@@ -28,6 +28,7 @@ public class ServerEcho {
 
         br.close();
 
+        // TCP 서버 종료
         stopServer();
 
     }

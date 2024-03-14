@@ -1,4 +1,4 @@
-package echo;
+package tcp_echo;
 
 import java.io.*;
 import java.net.InetSocketAddress;

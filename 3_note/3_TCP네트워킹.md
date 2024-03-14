@@ -1,5 +1,7 @@
 ## 3. TCP 네트워킹
 
+<br>
+
 IP 주소로 프로그램들이 통신할 때는 약속된 데이터 전송 규약이 있다. 이것을 전송용 프로토콜(protocol)이라고 부른다.
 인터넷에서 전송용 프로토콜은 TCP(Transmission Control Protocol)와 UDP(User Datagram Protocol)가 있다.
 
@@ -12,14 +14,20 @@ TCP는 IP와 함께 사용하기 때문에 TCP/IP라고도 한다. TCP는 웹 �
 자바는 TCP 네트워킹을 위해 java.net 패키지에서 ServerSocket과 Socket 클래스를 제공하고 있다.
 ServerSocket은 클라이언트의 연결을 수락하는 서버 쪽 클래스이고, Socket은 클라이언트에서 연결 요청할 때와 클라이언트와 서버 양쪽에서 데이터를 주고 받을 때 사용되는 클래스이다.
 
+<br>
+
 ![](../images/img4.png)
+
+<br>
 
 ServerSocket을 생성할 때는 바인딩할 Port 번호를 지정해야 한다. 위 그림에서는 50001번이 Port이다.
 서버가 실행되면 클라이언트는 Socket을 이용해서 서버의 IP 주소와 Port 번호로 연결 요청을 할 수 있다. ServerSocket은 accept() 메소드로 연결 수락을 하고 통신용 Socket을 생성한다. 그리고 나서 클라이언트와 서버는 양쪽의 Socket을 이용해서 데이터를 주고받게 된다.
 
-
+<br>
 
 ### TCP 서버
+
+<br>
 
 TCP 서버 프로그램을 개발하려면 우선 ServerSocket 객체를 생성해야 한다. 다음은 50001번 Port에 바인딩하는 ServerSocket를 생성하는 코드이다.
 
@@ -59,9 +67,11 @@ accept()는 클라이언트가 연결 요청하기 전까지 블로킹된다. �
 
 코드 보기 : [ServerTCP.java](https://github.com/atimaby28/Network-with-Java/blob/main/1_java/Network/src/tcp/ServerTCP.java)
 
-
+<br>
 
 ### TCP 클라이언트
+
+<br>
 
 클라이언트가 서버에 연결 오청을 하려면 Socket 객체를 생성할 때 생성자 매개값으로 서버 IP 주소와 Port 번호를 제공하면 된다. 로컬 컴퓨터에서 실행하는 서버로 연결 요청을 할 경우에는 IP 주소대신 localhost를 사용할 수 있다.
 
@@ -95,13 +105,19 @@ socket.close();
 
 코드 보기 : [ClientTCP.java](https://github.com/atimaby28/Network-with-Java/blob/main/1_java/Network/src/tcp/ClientTCP.java)
 
-
+<br>
 
 ### 입출력 스트림으로 데이터 주고 받기
 
+<br>
+
 클라이언트가 연결 요청(connect())을 하고 서버가 연결 수락(accept())했다면, 다음 그림과 같이 양쪽의 Socket 객제로부터 각각 입력 스트림(InputStream)과 출력 스트림(OutputStream)을 얻을 수 있다.
 
+<br>
+
 ![](../images/img6.png)
+
+<br>
 
 다음은 Socket으로부터 InputStream과 OutputStream을 얻는 코드이다.
 
@@ -111,6 +127,7 @@ socket.close();
 상대방에게 데이터를 보낼 때에는 보낼 데이터를 byte[] 배열로 생성하고, 이것을 매개값으로 해서 OutputStream의 write() 메소드를 호출하면 된다.
 다음 코드는 문자열로부터 UTF-8로 인코딩한 바이트 배열을 얻어내고, write() 메소드로 전송한다.
 
+<br>
 
 ``` Java
 String data = "보낼 데이터";
@@ -120,7 +137,11 @@ os.write(bytes);
 os.flush();
 ```
 
+<br>
+
 문자열을 좀 더 간편하게 보내고 싶다면 보조 스트림인 DataOutputStream을 연결해서 사용하면 된다.
+
+<br>
 
 ``` Java
 String data = "보낼 데이터";
@@ -129,8 +150,12 @@ dos.writeUTF(data);
 dos.flush();
 ```
 
+<br>
+
 데이터를 받기 위해서는 받은 데이터를 저장할 byte[] 배열을 하나 생성하고, 이것을 매개값으로 해서 InputStream의 read() 메소드를 호출하면 된다.
 read() 메소드는 읽은 데이터를 byte[] 배열에 저장하고 읽은 바이트 수를 리턴한다. 받는 데이터가 문자열이라면 다음과 같이 byte[] 배열을 UTF-8로 디코딩해서 문자열로 얻을 수 있다.
+
+<br>
 
 ``` Java
 byte[] bytes = new byte[1024];
@@ -138,6 +163,8 @@ InputStream is = socket.getInputStream();
 int num = is.read(bytes);
 String data = new String(bytes, 0, num "UTF-8");
 ```
+
+<br>
 
 문자열을 좀 더 간편하게 받고 싶다면 보조 스트림인 DataInputStream을 연결해서 사용하면 된다.
 
@@ -148,4 +175,7 @@ String data = new String(bytes, 0, num "UTF-8");
 
 코드 보기 : [Echo Examples](https://github.com/atimaby28/Network-with-Java/tree/main/1_java/Network/src/echo)
 
+<br>
+
+---
 

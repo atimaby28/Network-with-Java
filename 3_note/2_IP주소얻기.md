@@ -1,5 +1,7 @@
 ## 2. IP 주소 얻기
 
+<br>
+
 자바는 IP 주소를 java.net 패키지의 InetAddress로 표현한다. InetAddress를 이용하면 로컬 컴퓨터의 IP 주소를 얻을 수 있고, 도메인 이름으로 DNS에서 검색한 후 IP 주소를 가져올 수도 있다.
 로컬 컴퓨터의 InetAddress를 얻고 싶다면 InetAddress.getLocalHost() 메소드를 다음과 같이 호출하면 된다.
 
@@ -17,8 +19,12 @@ getByName() 메소드는 DNS에서 도메인 이름으로 등록된 단 하나�
 
 > String ip = InetAddress.getHostAddress();
 
+<br>
 
 ![](../images/img3.png)
 
+<br>
 
 코드 보기 : [InternetProtocol.java](https://github.com/atimaby28/Network-with-Java/blob/main/1_java/Network/src/ip/InternetProtocol.java)
+
+---

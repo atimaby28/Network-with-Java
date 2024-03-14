@@ -1,11 +1,10 @@
-package udp;
+package udp_thread;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
 
-public class ClientUDP {
+public class ClientThreadUDP {
     public static void main(String[] args) {
         try {
             // DatagramSocket 생성

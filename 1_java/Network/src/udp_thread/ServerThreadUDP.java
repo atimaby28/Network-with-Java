@@ -1,15 +1,19 @@
-package udp;
+package udp_thread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class ServerUDP {
+public class ServerThreadUDP {
 
     private static DatagramSocket datagramSocket;
+    private static ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public static void main(String[] args) throws IOException {
         System.out.println("-------------------------------------------------------");
@@ -52,18 +56,26 @@ public class ServerUDP {
 
                         System.out.println("\n클라이언트의 희망 뉴스 종류를 얻기 위해 대기함...\n");
                         datagramSocket.receive(receivePacket);
-                        String newsKind = new String(receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8");
 
-                        // 클라이언트의 IP와 Port 정보가 있는 SocketAddress 얻기
-                        SocketAddress socketAddress = receivePacket.getSocketAddress();
+                        executorService.execute(() -> {
+                            String newsKind = null;
+                            try {
+                                newsKind = new String(receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8");
 
-                        for (int i = 1; i <= 10; i++) {
-                            String data = newsKind + " : News" + i;
-                            byte[] bytes = data.getBytes("UTF-8");
-                            DatagramPacket sendPacket = new DatagramPacket(bytes, 0, bytes.length, socketAddress);
-                            datagramSocket.send(sendPacket);
-                            Thread.sleep(1000);
-                        }
+                                // 클라이언트의 IP와 Port 정보가 있는 SocketAddress 얻기
+                                SocketAddress socketAddress = receivePacket.getSocketAddress();
+
+                                for (int i = 1; i <= 10; i++) {
+                                    String data = newsKind + " : News" + i;
+                                    byte[] bytes = data.getBytes("UTF-8");
+                                    DatagramPacket sendPacket = new DatagramPacket(bytes, 0, bytes.length, socketAddress);
+                                    datagramSocket.send(sendPacket);
+                                    Thread.sleep(1000);
+                                }
+                            } catch (Exception e) {
+                                throw new RuntimeException(e.getMessage());
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     System.out.println("[Server] " + e.getMessage());
@@ -77,7 +89,9 @@ public class ServerUDP {
     }
 
     private static void stopServer() {
+        // DatagramSocket을 닫고 Port 언바인딩
         datagramSocket.close();
+        executorService.shutdownNow();
         System.out.println("[Server] Stopped !!");
     }
 
